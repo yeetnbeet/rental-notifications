@@ -16,7 +16,7 @@ FROM_EMAIL = 'sam@contenderbicycles.com'
 TO_EMAIL = 'sam@contenderbicycles.com'
 
 # Replace this with the product ID(s) you want to monitor
-MONITORED_PRODUCT_IDS = [1234567890,8048333422837]
+MONITORED_PRODUCT_IDS = [8048333422837,8048333717749,8048333783285,8048334930165]
 
 
 @app.route('/webhook', methods=['POST'])
@@ -34,7 +34,7 @@ def handle_webhook():
 
 
 def send_email_notification(item, order_number):
-    subject = f"Product Sold: {order_number} - {item['title']}"
+    subject = f"RENTAL ALERT: {order_number} - {item['title']}"
     
     # Extract and format the extra options
     extra_options = ""
@@ -43,24 +43,41 @@ def send_email_notification(item, order_number):
             extra_options += f"<tr><td>{prop['name']}</td><td>{prop['value']}</td></tr>"
     
     body = f"""
-    <html>
-    <body>
-        <h3>Order Number: {order_number} - {item['title']} has been sold.</h3>
-        <p>Quantity: {item['quantity']}</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Option</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                {extra_options}
-            </tbody>
-        </table>
-    </body>
-    </html>
-    """
+<html>
+<head>
+<style>
+    table {{
+        border-collapse: collapse;
+        width: 100%;
+    }}
+    th, td {{
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }}
+    th {{
+        background-color: #f2f2f2;
+    }}
+</style>
+</head>
+<body>
+    <h3>Order Number: {order_number} - {item['title']} has been sold.</h3>
+    <p>Quantity: {item['quantity']}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Option</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {extra_options}
+        </tbody>
+    </table>
+</body>
+</html>
+"""
+
 
     msg = MIMEMultipart()
     msg['Subject'] = subject
