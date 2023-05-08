@@ -7,15 +7,15 @@ from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 
-# Replace the following with your own email credentials and settings
+
 EMAIL_SERVER = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USER = 'sam@contenderbicycles.com'
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 FROM_EMAIL = 'sam@contenderbicycles.com'
-TO_EMAIL = 'sam@contenderbicycles.com'
+TO_EMAILS = ['sam@contenderbicycles.com','alison@contenderbicycles.com','matt@contenderbicycles.com']
 
-# Replace this with the product ID(s) you want to monitor
+
 MONITORED_PRODUCT_IDS = [8048333422837,8048333717749,8048333783285,8048334930165]
 
 
@@ -61,8 +61,8 @@ def send_email_notification(item, order_number):
 </style>
 </head>
 <body>
-    <h3>Order Number: {order_number} - {item['title']} has been sold.</h3>
-    <p>Quantity: {item['quantity']}</p>
+    <h3>Order Number: {order_number} - {item['title']}</h3>
+    <p>Days: {item['quantity']}</p>
     <table>
         <thead>
             <tr>
@@ -82,7 +82,7 @@ def send_email_notification(item, order_number):
     msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = FROM_EMAIL
-    msg['To'] = TO_EMAIL
+    msg['To'] = ', '.join(TO_EMAILS)  # Join the email addresses with a comma and a space
     
     msg.attach(MIMEText(body, 'html'))
 
