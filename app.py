@@ -33,8 +33,15 @@ def handle_webhook():
 
 
 def send_email_notification(item, order_number):
-    subject = f"Product Sold: {item['title']}"
-    body = f"Order Number: {order_number} - {item['title']} has been sold. Quantity: {item['quantity']}"
+    subject = f"RENTAL ALERT: {item['title']}"
+    
+    # Extract and format the extra options
+    extra_options = ""
+    if 'properties' in item:
+        for prop in item['properties']:
+            extra_options += f"{prop['name']}: {prop['value']}\n"
+    
+    body = f"Order Number: {order_number} - {item['title']} has been sold. Quantity: {item['quantity']}\n{extra_options}"
 
     msg = MIMEText(body)
     msg['Subject'] = subject
@@ -45,6 +52,7 @@ def send_email_notification(item, order_number):
         server.starttls()
         server.login(EMAIL_USER, EMAIL_PASSWORD)
         server.send_message(msg)
+
 
 
 if __name__ == "__main__":
