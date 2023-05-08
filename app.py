@@ -12,15 +12,16 @@ EMAIL_PORT = 587
 EMAIL_USER = 'sam@contenderbicycles.com'
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 FROM_EMAIL = 'sam@contenderbicycles.com'
-TO_EMAIL = 'service@contenderbicycles.com'
+TO_EMAIL = 'sam@contenderbicycles.com'
 
 # Replace this with the product ID(s) you want to monitor
-MONITORED_PRODUCT_IDS = [1234567890]
+MONITORED_PRODUCT_IDS = [1234567890,8048333422837]
 
 
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
     data = json.loads(request.data)
+    print(f"Received webhook data: {data}")
     line_items = data['line_items']
     
     for item in line_items:
