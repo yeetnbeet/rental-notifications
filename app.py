@@ -3,6 +3,7 @@ import os
 from flask import Flask, request
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 
@@ -33,20 +34,40 @@ def handle_webhook():
 
 
 def send_email_notification(item, order_number):
-    subject = f"RENTAL ALERT: {item['title']}"
+    subject = f"Product Sold: {order_number} - {item['title']}"
     
     # Extract and format the extra options
     extra_options = ""
     if 'properties' in item:
         for prop in item['properties']:
-            extra_options += f"{prop['name']}: {prop['value']}\n"
+            extra_options += f"<tr><td>{prop['name']}</td><td>{prop['value']}</td></tr>"
     
-    body = f"Order Number: {order_number} - {item['title']} has been sold. Quantity: {item['quantity']}\n{extra_options}"
+    body = f"""
+    <html>
+    <body>
+        <h3>Order Number: {order_number} - {item['title']} has been sold.</h3>
+        <p>Quantity: {item['quantity']}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {extra_options}
+            </tbody>
+        </table>
+    </body>
+    </html>
+    """
 
-    msg = MIMEText(body)
+    msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = FROM_EMAIL
     msg['To'] = TO_EMAIL
+    
+    msg.attach(MIMEText(body, 'html'))
 
     with smtplib.SMTP(EMAIL_SERVER, EMAIL_PORT) as server:
         server.starttls()
