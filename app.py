@@ -13,7 +13,7 @@ EMAIL_PORT = 587
 EMAIL_USER = 'sam@contenderbicycles.com'
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 FROM_EMAIL = 'sam@contenderbicycles.com'
-TO_EMAILS = ['sam@contenderbicycles.com','alison@contenderbicycles.com','matt@contenderbicycles.com']
+TO_EMAILS = ['sam@contenderbicycles.com','alison@contenderbicycles.com','matt@contenderbicycles.com','conner@contenderbicycles.com','steve@contenderbicycles.com']
 
 
 MONITORED_PRODUCT_IDS = [8048333422837,8048333717749,8048333783285,8048334930165,8051701252341,8051700859125,8051700760821,8051703906549,8055688691957,8055688331509,8055688102133,8055688888565,8055666278645,8055670243573,8055670178037,8055670309109]
