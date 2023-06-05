@@ -28,7 +28,7 @@ def handle_webhook():
     for item in line_items:
         if item['product_id'] in MONITORED_PRODUCT_IDS:
             send_email_notification(item, data['order_number'])
-            break
+            
 
     return '', 200
 
